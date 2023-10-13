@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+   name: drf
+spec:
+  externalIPs:
+  - 192.168.1.102
+  type: LoadBalancer
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 8000
+  selector:
+    app: drf

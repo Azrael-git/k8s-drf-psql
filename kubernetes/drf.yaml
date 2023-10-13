@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata: 
+  name: drf-deployment
+  labels:
+    app: drf
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: drf
+  template:
+    metadata:
+      labels:
+        app: drf
+    spec:
+      imagePullSecrets:
+      - name: registry-secret
+      containers:
+      - name: drf
+        image: azraeldcr/django:v3
+        ports: 
+        - containerPort: 8000
+        env:
+        - name: DJANGO_SECRET_KEY
+          valueFrom: 
+            secretKeyRef:
+              name: drf-secrets
+              key: django-secret
+        - name: DEBUG
+          valueFrom:
+            secretKeyRef:
+              name: drf-secrets
+              key: django-debug
+        resources:
+          requests:
+            cpu: 250m
+            memory: 64Mi
+          limits:
+            cpu: 500m
+            memory: 128Mi
